@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profesyonel Vardiya Planlama Sistemi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --night-shift: #2c3e50;
+            --day-shift: #3498db;
+            --evening-shift: #e74c3c;
+            --gray-color: #95a5a6;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .system-info {
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #f8f9fa;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, var(--accent-color), #c0392b);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, var(--success-color), #27ae60);
+        }
+        
+        .shift-distribution-info {
+            background: linear-gradient(to right, #e8f4fc, #d6eaf8);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--secondary-color);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .shift-distribution-info h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .distribution-list {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .distribution-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .shift-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        .shift-color.night {
+            background-color: var(--night-shift);
+        }
+        
+        .shift-color.day {
+            background-color: var(--day-shift);
+        }
+        
+        .shift-color.evening {
+            background-color: var(--evening-shift);
+        }
+        
+        .personnel-schedule {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .personnel-schedule th, .personnel-schedule td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .personnel-schedule th {
+            background: linear-gradient(to bottom, var(--light-color), #d5dbdb);
+            font-weight: 600;
+            padding: 15px;
+        }
+        
+        .personnel-schedule .personnel-info {
+            text-align: left;
+            background-color: #f8f9fa;
+            font-weight: 500;
+        }
+        
+        .shift-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin: 2px;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .shift-00-08 { background-color: var(--night-shift); }
+        .shift-08-16 { background-color: var(--day-shift); }
+        .shift-16-00 { background-color: var(--evening-shift); }
+        .day-off { background-color: var(--gray-color); }
+        
+        .shift-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .shift-stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+            border-top: 4px solid transparent;
+        }
+        
+        .shift-stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .shift-stat-card.night { border-top-color: var(--night-shift); }
+        .shift-stat-card.day { border-top-color: var(--day-shift); }
+        .shift-stat-card.evening { border-top-color: var(--evening-shift); }
+        
+        .shift-stat-card h4 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .shift-count {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .shift-count.night { color: var(--night-shift); }
+        .shift-count.day { color: var(--day-shift); }
+        .shift-count.evening { color: var(--evening-shift); }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .close {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray-color);
+            transition: var(--transition);
+        }
+        
+        .close:hover {
+            color: var(--accent-color);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .personnel-filters {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-group label {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-color);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+        
+        .notification {
+            display: none; /* Bildirimler kapatıldı */
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Vardiya oluşturma sayfası stilleri */
+        .shift-creation-section {
+            margin-bottom: 30px;
+        }
+        
+        .shift-creation-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .shift-list {
+            margin-top: 30px;
+        }
+        
+        .shift-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .shift-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .shift-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Çoklu vardiya seçimi stilleri */
+        .shift-type-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+        
+        /* Personel analiz sayfası stilleri */
+        .analysis-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .analysis-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .analysis-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .equality-score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+        
+        .equality-excellent {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success-color);
+        }
+        
+        .equality-good {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning-color);
+        }
+        
+        .equality-poor {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--accent-color);
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-night { background-color: var(--night-shift); }
+        .progress-day { background-color: var(--day-shift); }
+        .progress-evening { background-color: var(--evening-shift); }
+
+        /* Vardiya listesi tablosu stilleri - YAZDIRMA İÇİN OPTİMİZE */
+        .shifts-table-container {
+            margin-top: 30px;
+        }
+        
+        .shifts-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            font-size: 12px; /* Yazdırma için daha küçük font */
+        }
+        
+        .shifts-table th, .shifts-table td {
+            border: 1px solid #e0e0e0;
+            padding: 8px 6px; /* Daha sıkı padding */
+            text-align: center;
+            line-height: 1.3;
+        }
+        
+        .shifts-table th {
+            background: linear-gradient(to bottom, var(--light-color), #d5dbdb);
+            font-weight: 600;
+            padding: 10px 6px; /* Daha sıkı padding */
+            font-size: 11px; /* Başlık fontu daha küçük */
+        }
+        
+        .shifts-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        /* YAZDIRMA STİLLERİ */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 12px !important;
+            }
+            
+            header, .nav-tabs, .calendar-controls, .btn, .notification,
+            .personnel-filters, .shift-stats, .shift-item-actions {
+                display: none !important;
+            }
+            
+            .container {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            
+            .tab-content {
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            
+            .shifts-table {
+                font-size: 10px !important;
+                box-shadow: none !important;
+            }
+            
+            .shifts-table th, .shifts-table td {
+                padding: 6px 4px !important;
+            }
+            
+            .shifts-table th {
+                font-size: 10px !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .system-info {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .calendar-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .distribution-list {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .personnel-filters {
+                flex-direction: column;
+            }
+            
+            .shift-creation-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h1>Profesyonel Vardiya Planlama Sistemi</h1>
+                </div>
+                <div class="system-info">
+                    <div class="info-item">
+                        <i class="fas fa-users"></i>
+                        <span id="total-personnel-count">0 Personel</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-home"></i>
+                        <span>5 Ev</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="current-date"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="nav-tabs">
+            <div class="tab active" data-tab="personnel">
+                <i class="fas fa-users-cog"></i>
+                <span>Personel Ekle</span>
+            </div>
+            <div class="tab" data-tab="shift-creation">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Vardiya Oluştur</span>
+            </div>
+            <div class="tab" data-tab="analysis">
+                <i class="fas fa-chart-pie"></i>
+                <span> Adalet Analizi</span>
+            </div>
+            <div class="tab" data-tab="print">
+                <i class="fas fa-print"></i>
+                <span>Vardiya Tablosu</span>
+            </div>
+        </div>
+        
+        <!-- Personel Yönetimi Sekmesi -->
+        <div class="tab-content active" id="personnel-tab">
+            <div class="calendar-controls">
+                <h2><i class="fas fa-users-cog"></i> Personel Yönetimi</h2>
+                <button id="add-personnel" class="btn btn-success">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Yeni Personel Ekle</span>
+                </button>
+            </div>
+            
+            <div class="personnel-filters">
+                <div class="filter-group">
+                    <label for="personnel-filter-house">Ev Filtresi:</label>
+                    <select id="personnel-filter-house">
+                        <option value="all">Tüm Evler</option>
+                        <option value="A">Ev A</option>
+                        <option value="B">Ev B</option>
+                        <option value="C">Ev C</option>
+                        <option value="D">Ev D</option>
+                        <option value="E">Ev E</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="personnel-filter-gender">Cinsiyet Filtresi:</label>
+                    <select id="personnel-filter-gender">
+                        <option value="all">Tümü</option>
+                        <option value="male">Erkek</option>
+                        <option value="female">Kadın</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="personnel-list-container">
+                <table class="personnel-schedule">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Cinsiyet</th>
+                            <th>Ev</th>
+                            <th>Toplam Çalışma Saati</th>
+                            <th>Vardiya Dağılımı</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personnel-list">
+                        <!-- Personel listesi buraya eklenecek -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Vardiya Oluşturma Sekmesi -->
+        <div class="tab-content" id="shift-creation-tab">
+            <div class="calendar-controls">
+                <h2><i class="fas fa-calendar-plus"></i> Vardiya Oluştur</h2>
+            </div>
+            
+            <div class="shift-distribution-info">
+                <h3><i class="fas fa-info-circle"></i> Vardiya Dağılım Bilgileri</h3>
+                <div class="distribution-list">
+                    <div class="distribution-item">
+                        <div class="shift-color night"></div>
+                        <span><strong>00:00 - 08:00 (Gece):</strong> Sınırsız Personel</span>
+                    </div>
+                    <div class="distribution-item">
+                        <div class="shift-color day"></div>
+                        <span><strong>08:00 - 16:00 (Gündüz):</strong> Sınırsız Personel</span>
+                    </div>
+                    <div class="distribution-item">
+                        <div class="shift-color evening"></div>
+                        <span><strong>16:00 - 00:00 (Akşam):</strong> Sınırsız Personel</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="shift-creation-section">
+                <h3><i class="fas fa-plus-circle"></i> Yeni Vardiya Ekle</h3>
+                <div class="shift-creation-form">
+                    <div class="form-group">
+                        <label for="new-shift-date">Tarih</label>
+                        <input type="date" id="new-shift-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-shift-personnel">Personel</label>
+                        <select id="new-shift-personnel" required>
+                            <option value="">Personel Seçin</option>
+                            <!-- Personel listesi buraya eklenecek -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Vardiya Türü</label>
+                        <div class="shift-type-checkboxes">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="new-shift-night" value="00-08">
+                                <label for="new-shift-night">00:00 - 08:00 (Gece)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="new-shift-day" value="08-16">
+                                <label for="new-shift-day">08:00 - 16:00 (Gündüz)</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="new-shift-evening" value="16-00">
+                                <label for="new-shift-evening">16:00 - 00:00 (Akşam)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button id="add-shift" class="btn btn-success">
+                    <i class="fas fa-plus"></i>
+                    <span>Vardiya Ekle</span>
+                </button>
+            </div>
+            
+            <div class="shift-list">
+                <h3><i class="fas fa-list"></i> Eklenen Vardiyalar</h3>
+                <div id="shift-list-container">
+                    <!-- Vardiya listesi buraya eklenecek -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Personel Analiz Sekmesi -->
+        <div class="tab-content" id="analysis-tab">
+            <div class="calendar-controls">
+                <h2><i class="fas fa-chart-pie"></i> Personel Analiz</h2>
+            </div>
+            
+            <div class="shift-stats" id="analysis-shift-stats">
+                <!-- Vardiya istatistikleri buraya eklenecek -->
+            </div>
+            
+            <div class="analysis-container" id="analysis-container">
+                <!-- Personel analiz içeriği buraya eklenecek -->
+            </div>
+        </div>
+        
+        <!-- YAZDIRMA SAYFASI -->
+        <div class="tab-content" id="print-tab">
+            <div class="calendar-controls">
+                <h2><i class="fas fa-print"></i> Vardiya Listesi Yazdır</h2>
+                <button id="print-button" class="btn btn-success">
+                    <i class="fas fa-print"></i>
+                    <span>Yazdır</span>
+                </button>
+            </div>
+            
+            <div class="personnel-filters">
+                <div class="filter-group">
+                    <label for="print-filter-house">Ev Filtresi:</label>
+                    <select id="print-filter-house">
+                        <option value="all">Tüm Evler</option>
+                        <option value="A">Ev A</option>
+                        <option value="B">Ev B</option>
+                        <option value="C">Ev C</option>
+                        <option value="D">Ev D</option>
+                        <option value="E">Ev E</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="print-filter-gender">Cinsiyet Filtresi:</label>
+                    <select id="print-filter-gender">
+                        <option value="all">Tümü</option>
+                        <option value="male">Erkek</option>
+                        <option value="female">Kadın</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="print-filter-shift-type">Vardiya Türü:</label>
+                    <select id="print-filter-shift-type">
+                        <option value="all">Tüm Vardiyalar</option>
+                        <option value="00-08">Gece (00-08)</option>
+                        <option value="08-16">Gündüz (08-16)</option>
+                        <option value="16-00">Akşam (16-00)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="print-filter-name">Personel Ara:</label>
+                    <input type="text" id="print-filter-name" placeholder="İsim veya soyisim girin">
+                </div>
+            </div>
+            
+            <!-- Vardiya Listesi Tablosu - YAZDIRMA İÇİN OPTİMİZE -->
+            <div class="shifts-table-container">
+                <h3><i class="fas fa-list"></i> Tüm Vardiyalar</h3>
+                
+                <div id="print-tables-container">
+                    <!-- Evlere göre ayrılmış tablolar buraya eklenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Personel Ekleme Modalı -->
+    <div class="modal" id="personnel-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Personel Ekle</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="personnel-form">
+                <div class="form-group">
+                    <label for="personnel-name">Ad Soyad</label>
+                    <input type="text" id="personnel-name" required placeholder="Personelin adı ve soyadı">
+                </div>
+                <div class="form-group">
+                    <label for="personnel-gender">Cinsiyet</label>
+                    <select id="personnel-gender" required>
+                        <option value="male">Erkek</option>
+                        <option value="female">Kadın</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="personnel-house">Ev</label>
+                    <select id="personnel-house" required>
+                        <option value="A">Ev A</option>
+                        <option value="B">Ev B</option>
+                        <option value="C">Ev C</option>
+                        <option value="D">Ev D</option>
+                        <option value="E">Ev E</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i>
+                        <span>Kaydet</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Personel Düzenleme Modalı -->
+    <div class="modal" id="edit-personnel-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Personel Düzenle</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="edit-personnel-form">
+                <input type="hidden" id="edit-personnel-id">
+                <div class="form-group">
+                    <label for="edit-personnel-name">Ad Soyad</label>
+                    <input type="text" id="edit-personnel-name" required placeholder="Personelin adı ve soyadı">
+                </div>
+                <div class="form-group">
+                    <label for="edit-personnel-gender">Cinsiyet</label>
+                    <select id="edit-personnel-gender" required>
+                        <option value="male">Erkek</option>
+                        <option value="female">Kadın</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-personnel-house">Ev</label>
+                    <select id="edit-personnel-house" required>
+                        <option value="A">Ev A</option>
+                        <option value="B">Ev B</option>
+                        <option value="C">Ev C</option>
+                        <option value="D">Ev D</option>
+                        <option value="E">Ev E</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i>
+                        <span>Kaydet</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Vardiya Düzenleme Modalı -->
+    <div class="modal" id="shift-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Vardiya Düzenle</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="shift-form">
+                <div class="form-group">
+                    <label for="shift-date">Tarih</label>
+                    <input type="date" id="shift-date">
+                </div>
+                <div class="form-group">
+                    <label for="shift-personnel">Personel</label>
+                    <select id="shift-personnel">
+                        <!-- Personel listesi buraya eklenecek -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Vardiya Türü</label>
+                    <div class="shift-type-checkboxes">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="shift-night" value="00-08">
+                            <label for="shift-night">00:00 - 08:00 (Gece)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="shift-day" value="08-16">
+                            <label for="shift-day">08:00 - 16:00 (Gündüz)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="shift-evening" value="16-00">
+                            <label for="shift-evening">16:00 - 00:00 (Akşam)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-danger" id="delete-shift">
+                        <i class="fas fa-trash"></i>
+                        <span>Vardiyayı Sil</span>
+                    </button>
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i>
+                        <span>Kaydet</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bildirim - KAPATILDI -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-message">İşlem başarıyla tamamlandı!</span>
+    </div>
+
+    <script>
+        // Uygulama verileri
+        let personnel = [];
+        let shifts = [];
+        
+        // DOM elementleri
+        const currentDateElement = document.getElementById('current-date');
+        const totalPersonnelCountElement = document.getElementById('total-personnel-count');
+        const personnelList = document.getElementById('personnel-list');
+        const addPersonnelButton = document.getElementById('add-personnel');
+        const personnelModal = document.getElementById('personnel-modal');
+        const personnelForm = document.getElementById('personnel-form');
+        const editPersonnelModal = document.getElementById('edit-personnel-modal');
+        const editPersonnelForm = document.getElementById('edit-personnel-form');
+        const shiftModal = document.getElementById('shift-modal');
+        const shiftForm = document.getElementById('shift-form');
+        const deleteShiftButton = document.getElementById('delete-shift');
+        const closeButtons = document.querySelectorAll('.close');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const personnelFilterHouse = document.getElementById('personnel-filter-house');
+        const personnelFilterGender = document.getElementById('personnel-filter-gender');
+        const analysisShiftStatsContainer = document.getElementById('analysis-shift-stats');
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+        
+        // Vardiya oluşturma sayfası elementleri
+        const newShiftDate = document.getElementById('new-shift-date');
+        const newShiftPersonnel = document.getElementById('new-shift-personnel');
+        const addShiftButton = document.getElementById('add-shift');
+        const shiftListContainer = document.getElementById('shift-list-container');
+        
+        // Vardiya checkbox elementleri
+        const newShiftNight = document.getElementById('new-shift-night');
+        const newShiftDay = document.getElementById('new-shift-day');
+        const newShiftEvening = document.getElementById('new-shift-evening');
+        const shiftNight = document.getElementById('shift-night');
+        const shiftDay = document.getElementById('shift-day');
+        const shiftEvening = document.getElementById('shift-evening');
+        
+        // Personel analiz sayfası elementleri
+        const analysisContainer = document.getElementById('analysis-container');
+        
+        // Yazdırma sayfası elementleri
+        const printButton = document.getElementById('print-button');
+        const printFilterHouse = document.getElementById('print-filter-house');
+        const printFilterGender = document.getElementById('print-filter-gender');
+        const printFilterShiftType = document.getElementById('print-filter-shift-type');
+        const printFilterName = document.getElementById('print-filter-name');
+        const printTablesContainer = document.getElementById('print-tables-container');
+        
+        // LocalStorage'dan verileri yükle
+        function loadDataFromLocalStorage() {
+            const savedPersonnel = localStorage.getItem('personnelData');
+            const savedShifts = localStorage.getItem('shiftsData');
+            
+            if (savedPersonnel) {
+                personnel = JSON.parse(savedPersonnel);
+            }
+            
+            if (savedShifts) {
+                shifts = JSON.parse(savedShifts);
+            }
+        }
+        
+        // Verileri LocalStorage'a kaydet
+        function saveDataToLocalStorage() {
+            localStorage.setItem('personnelData', JSON.stringify(personnel));
+            localStorage.setItem('shiftsData', JSON.stringify(shifts));
+        }
+        
+        // Başlangıç verilerini yükle
+        function initializeData() {
+            loadDataFromLocalStorage();
+            
+            updateAllPages();
+        }
+        
+        // Tüm sayfaları güncelle
+        function updateAllPages() {
+            updateStatistics();
+            renderPersonnelList();
+            updateCurrentDate();
+            updatePersonnelSelects();
+            renderShiftList();
+            renderAnalysisPage();
+            renderPrintPage();
+        }
+        
+        // Tarih formatını güncelle
+        function updateCurrentDate() {
+            totalPersonnelCountElement.textContent = `${personnel.length} Personel`;
+        }
+        
+        // Personel seçim listelerini güncelle
+        function updatePersonnelSelects() {
+            // Vardiya oluşturma sayfasındaki personel seçimi
+            newShiftPersonnel.innerHTML = '<option value="">Personel Seçin</option>';
+            personnel.forEach(person => {
+                const option = document.createElement('option');
+                option.value = person.id;
+                option.textContent = person.name;
+                newShiftPersonnel.appendChild(option);
+            });
+            
+            // Vardiya düzenleme modalındaki personel seçimi
+            const shiftPersonnelSelect = document.getElementById('shift-personnel');
+            shiftPersonnelSelect.innerHTML = '';
+            personnel.forEach(person => {
+                const option = document.createElement('option');
+                option.value = person.id;
+                option.textContent = person.name;
+                shiftPersonnelSelect.appendChild(option);
+            });
+        }
+        
+        // Personel analiz sayfası için vardiya istatistiklerini göster
+        function renderAnalysisShiftStats() {
+            const allShifts = shifts;
+            
+            const nightShifts = allShifts.filter(s => s.type === '00-08').length;
+            const dayShifts = allShifts.filter(s => s.type === '08-16').length;
+            const eveningShifts = allShifts.filter(s => s.type === '16-00').length;
+            
+            analysisShiftStatsContainer.innerHTML = `
+                <div class="shift-stats">
+                    <div class="shift-stat-card night">
+                        <h4><i class="fas fa-moon"></i> Toplam Gece Vardiyası (00-08)</h4>
+                        <div class="shift-count night">${nightShifts}</div>
+                        <div>Tüm Zamanlar</div>
+                    </div>
+                    <div class="shift-stat-card day">
+                        <h4><i class="fas fa-sun"></i> Toplam Gündüz Vardiyası (08-16)</h4>
+                        <div class="shift-count day">${dayShifts}</div>
+                        <div>Tüm Zamanlar</div>
+                    </div>
+                    <div class="shift-stat-card evening">
+                        <h4><i class="fas fa-star"></i> Toplam Akşam Vardiyası (16-00)</h4>
+                        <div class="shift-count evening">${eveningShifts}</div>
+                        <div>Tüm Zamanlar</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Personel listesini oluştur
+        function renderPersonnelList() {
+            personnelList.innerHTML = '';
+            
+            // Filtreleme
+            const houseFilter = personnelFilterHouse.value;
+            const genderFilter = personnelFilterGender.value;
+            
+            let filteredPersonnel = personnel;
+            
+            if (houseFilter !== 'all') {
+                filteredPersonnel = filteredPersonnel.filter(p => p.house === houseFilter);
+            }
+            
+            if (genderFilter !== 'all') {
+                filteredPersonnel = filteredPersonnel.filter(p => p.gender === genderFilter);
+            }
+            
+            filteredPersonnel.forEach(person => {
+                const row = document.createElement('tr');
+                
+                // Vardiya dağılımını hesapla
+                const nightShifts = person.shiftCounts['00-08'] || 0;
+                const dayShifts = person.shiftCounts['08-16'] || 0;
+                const eveningShifts = person.shiftCounts['16-00'] || 0;
+                
+                const genderIcon = person.gender === 'male' ? 
+                    '<i class="fas fa-mars"></i>' : '<i class="fas fa-venus"></i>';
+                
+                row.innerHTML = `
+                    <td>${genderIcon} ${person.name}</td>
+                    <td>${person.gender === 'male' ? 'Erkek' : 'Kadın'}</td>
+                    <td>Ev ${person.house}</td>
+                    <td>${person.workHours} saat</td>
+                    <td>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span class="shift-badge shift-00-08">Gece: ${nightShifts}</span>
+                            <span class="shift-badge shift-08-16">Gündüz: ${dayShifts}</span>
+                            <span class="shift-badge shift-16-00">Akşam: ${eveningShifts}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn" onclick="editPersonnel(${person.id})">
+                            <i class="fas fa-edit"></i>
+                            <span>Düzenle</span>
+                        </button>
+                        <button class="btn btn-danger" onclick="deletePersonnel(${person.id})">
+                            <i class="fas fa-trash"></i>
+                            <span>Sil</span>
+                        </button>
+                    </td>
+                `;
+                
+                personnelList.appendChild(row);
+            });
+            
+            // Eğer filtreleme sonucu personel yoksa
+            if (filteredPersonnel.length === 0) {
+                personnelList.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <h3>Personel bulunamadı</h3>
+                            <p>Seçtiğiniz filtrelerle eşleşen personel bulunmamaktadır.</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+        
+        // İstatistikleri güncelle
+        function updateStatistics() {
+            totalPersonnelCountElement.textContent = `${personnel.length} Personel`;
+        }
+        
+        // Vardiya modalını aç
+        function openShiftModal(shiftId = null) {
+            const modal = document.getElementById('shift-modal');
+            const shiftDateInput = document.getElementById('shift-date');
+            const shiftPersonnelSelect = document.getElementById('shift-personnel');
+            
+            // Personel seçeneklerini doldur
+            shiftPersonnelSelect.innerHTML = '';
+            personnel.forEach(person => {
+                const option = document.createElement('option');
+                option.value = person.id;
+                option.textContent = person.name;
+                shiftPersonnelSelect.appendChild(option);
+            });
+            
+            // Checkbox'ları sıfırla
+            shiftNight.checked = false;
+            shiftDay.checked = false;
+            shiftEvening.checked = false;
+            
+            if (shiftId) {
+                // Mevcut vardiyayı düzenle
+                const shift = shifts.find(s => s.id === shiftId);
+                if (shift) {
+                    shiftDateInput.value = shift.date;
+                    shiftPersonnelSelect.value = shift.personnelId;
+                    
+                    // Checkbox'ları işaretle
+                    if (shift.type === '00-08') shiftNight.checked = true;
+                    if (shift.type === '08-16') shiftDay.checked = true;
+                    if (shift.type === '16-00') shiftEvening.checked = true;
+                    
+                    // Sil butonunu göster
+                    deleteShiftButton.style.display = 'inline-block';
+                    deleteShiftButton.dataset.shiftId = shiftId;
+                }
+            } else {
+                // Yeni vardiya ekle
+                shiftDateInput.value = '';
+                shiftPersonnelSelect.value = '';
+                
+                // Sil butonunu gizle
+                deleteShiftButton.style.display = 'none';
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        // Vardiya sil
+        function deleteShift(shiftId) {
+            const shift = shifts.find(s => s.id === shiftId);
+            if (shift) {
+                // Personelin vardiya sayısını ve çalışma saatini güncelle
+                const person = personnel.find(p => p.id === shift.personnelId);
+                if (person) {
+                    person.workHours -= 8;
+                    person.shiftCounts[shift.type] = Math.max(0, (person.shiftCounts[shift.type] || 0) - 1);
+                }
+            }
+            
+            shifts = shifts.filter(s => s.id !== shiftId);
+            saveDataToLocalStorage();
+            updateAllPages();
+            shiftModal.style.display = 'none';
+        }
+        
+        // Personel modalını aç
+        function openPersonnelModal(personnelId = null) {
+            const modal = document.getElementById('personnel-modal');
+            const personnelNameInput = document.getElementById('personnel-name');
+            const personnelGenderSelect = document.getElementById('personnel-gender');
+            const personnelHouseSelect = document.getElementById('personnel-house');
+            
+            if (personnelId) {
+                // Mevcut personeli düzenle
+                const person = personnel.find(p => p.id === personnelId);
+                if (person) {
+                    personnelNameInput.value = person.name;
+                    personnelGenderSelect.value = person.gender;
+                    personnelHouseSelect.value = person.house;
+                }
+            } else {
+                // Yeni personel ekle
+                personnelNameInput.value = '';
+                personnelGenderSelect.value = 'male';
+                personnelHouseSelect.value = 'A';
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        // Personel düzenleme modalını aç
+        function openEditPersonnelModal(personnelId) {
+            const modal = document.getElementById('edit-personnel-modal');
+            const personnelNameInput = document.getElementById('edit-personnel-name');
+            const personnelGenderSelect = document.getElementById('edit-personnel-gender');
+            const personnelHouseSelect = document.getElementById('edit-personnel-house');
+            const personnelIdInput = document.getElementById('edit-personnel-id');
+            
+            const person = personnel.find(p => p.id === personnelId);
+            if (person) {
+                personnelIdInput.value = person.id;
+                personnelNameInput.value = person.name;
+                personnelGenderSelect.value = person.gender;
+                personnelHouseSelect.value = person.house;
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        // Personel sil
+        function deletePersonnel(personnelId) {
+            if (confirm('Bu personeli silmek istediğinizden emin misiniz?')) {
+                // Personelin vardiyalarını da sil
+                shifts = shifts.filter(s => s.personnelId !== personnelId);
+                personnel = personnel.filter(p => p.id !== personnelId);
+                saveDataToLocalStorage();
+                updateAllPages();
+            }
+        }
+        
+        // Personel düzenle
+        function editPersonnel(personnelId) {
+            openEditPersonnelModal(personnelId);
+        }
+        
+        // Vardiya listesini oluştur
+        function renderShiftList() {
+            shiftListContainer.innerHTML = '';
+            
+            if (shifts.length === 0) {
+                shiftListContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-plus"></i>
+                        <h3>Henüz vardiya eklenmemiş</h3>
+                        <p>Yukarıdaki formu kullanarak vardiya ekleyebilirsiniz.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Vardiyaları tarihe göre sırala
+            const sortedShifts = [...shifts].sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            sortedShifts.forEach(shift => {
+                const personnelInfo = personnel.find(p => p.id === shift.personnelId);
+                if (!personnelInfo) return;
+                
+                const shiftItem = document.createElement('div');
+                shiftItem.classList.add('shift-item');
+                
+                const shiftDate = new Date(shift.date);
+                const formattedDate = shiftDate.toLocaleDateString('tr-TR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+                
+                const genderIcon = personnelInfo.gender === 'male' ? 
+                    '<i class="fas fa-mars"></i>' : '<i class="fas fa-venus"></i>';
+                
+                shiftItem.innerHTML = `
+                    <div class="shift-item-info">
+                        <strong>${formattedDate} - ${shift.type}</strong>
+                        <span>${genderIcon} ${personnelInfo.name} (Ev ${personnelInfo.house})</span>
+                    </div>
+                    <div class="shift-item-actions">
+                        <button class="btn" onclick="openShiftModal(${shift.id})">
+                            <i class="fas fa-edit"></i>
+                            <span>Düzenle</span>
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteShift(${shift.id})">
+                            <i class="fas fa-trash"></i>
+                            <span>Sil</span>
+                        </button>
+                    </div>
+                `;
+                
+                shiftListContainer.appendChild(shiftItem);
+            });
+        }
+        
+        // Yazdırma sayfasını oluştur
+        function renderPrintPage() {
+            printTablesContainer.innerHTML = '';
+            
+            if (shifts.length === 0) {
+                printTablesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-plus"></i>
+                        <h3>Henüz vardiya eklenmemiş</h3>
+                        <p>Vardiya oluştur sayfasından vardiya ekleyebilirsiniz.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Filtreleme
+            const houseFilter = printFilterHouse.value;
+            const genderFilter = printFilterGender.value;
+            const shiftTypeFilter = printFilterShiftType.value;
+            const nameFilter = printFilterName.value.toLowerCase();
+            
+            // Vardiyaları tarihe göre sırala
+            const sortedShifts = [...shifts].sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            // Evlere göre grupla
+            const houses = ['A', 'B', 'C', 'D', 'E'];
+            
+            houses.forEach(house => {
+                // Eğer ev filtresi seçilmişse ve bu ev değilse atla
+                if (houseFilter !== 'all' && houseFilter !== house) return;
+                
+                // Bu eve ait vardiyaları filtrele
+                const houseShifts = sortedShifts.filter(shift => {
+                    const personnelInfo = personnel.find(p => p.id === shift.personnelId);
+                    if (!personnelInfo) return false;
+                    
+                    // Filtreleme uygula
+                    if (personnelInfo.house !== house) return false;
+                    if (genderFilter !== 'all' && personnelInfo.gender !== genderFilter) return false;
+                    if (shiftTypeFilter !== 'all' && shift.type !== shiftTypeFilter) return false;
+                    if (nameFilter && !personnelInfo.name.toLowerCase().includes(nameFilter)) return false;
+                    
+                    return true;
+                });
+                
+                // Eğer bu ev için vardiya yoksa atla
+                if (houseShifts.length === 0) return;
+                
+                // Tarihe göre grupla
+                const shiftsByDate = {};
+                houseShifts.forEach(shift => {
+                    if (!shiftsByDate[shift.date]) {
+                        shiftsByDate[shift.date] = {
+                            '00-08': [],
+                            '08-16': [],
+                            '16-00': []
+                        };
+                    }
+                    
+                    shiftsByDate[shift.date][shift.type].push(shift);
+                });
+                
+                // Tabloyu oluştur
+                const tableContainer = document.createElement('div');
+                tableContainer.classList.add('shifts-table-container');
+                tableContainer.innerHTML = `<h3><i class="fas fa-home"></i> Ev ${house} Vardiyaları</h3>`;
+                
+                const table = document.createElement('table');
+                table.classList.add('shifts-table');
+                
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Personel</th>
+                            <th>Cinsiyet</th>
+                            <th>00:00 - 08:00</th>
+                            <th>08:00 - 16:00</th>
+                            <th>16:00 - 00:00</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.keys(shiftsByDate).map(date => {
+                            const dateShifts = shiftsByDate[date];
+                            const shiftDate = new Date(date);
+                            const formattedDate = shiftDate.toLocaleDateString('tr-TR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric'
+                            });
+                            
+                            // Her vardiya türü için personel listesini oluştur
+                            const nightShifts = dateShifts['00-08'];
+                            const dayShifts = dateShifts['08-16'];
+                            const eveningShifts = dateShifts['16-00'];
+                            
+                            // Her vardiya türü için personel bilgilerini formatla
+                            const formatShiftPersonnel = (shiftList) => {
+                                return shiftList.map(shift => {
+                                    const personnelInfo = personnel.find(p => p.id === shift.personnelId);
+                                    if (!personnelInfo) return '';
+                                    
+                                    const genderIcon = personnelInfo.gender === 'male' ? 
+                                        '<i class="fas fa-mars"></i>' : '<i class="fas fa-venus"></i>';
+                                    return `${genderIcon} ${personnelInfo.name}`;
+                                }).filter(name => name !== '').join('<br>');
+                            };
+                            
+                            const nightPersonnel = formatShiftPersonnel(nightShifts);
+                            const dayPersonnel = formatShiftPersonnel(dayShifts);
+                            const eveningPersonnel = formatShiftPersonnel(eveningShifts);
+                            
+                            return `
+                                <tr>
+                                    <td>${formattedDate}</td>
+                                    <td>${getPersonnelNamesForDateAndHouse(date, house)}</td>
+                                    <td>${getPersonnelGendersForDateAndHouse(date, house)}</td>
+                                    <td>${nightPersonnel || '-'}</td>
+                                    <td>${dayPersonnel || '-'}</td>
+                                    <td>${eveningPersonnel || '-'}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                `;
+                
+                tableContainer.appendChild(table);
+                printTablesContainer.appendChild(tableContainer);
+            });
+        }
+        
+        // Belirli bir tarih ve evdeki personel isimlerini al
+        function getPersonnelNamesForDateAndHouse(date, house) {
+            const dateShifts = shifts.filter(shift => shift.date === date);
+            const personnelNames = dateShifts.map(shift => {
+                const personnelInfo = personnel.find(p => p.id === shift.personnelId);
+                return personnelInfo && personnelInfo.house === house ? personnelInfo.name : '';
+            }).filter(name => name !== '');
+            
+            return [...new Set(personnelNames)].join('<br>');
+        }
+        
+        // Belirli bir tarih ve evdeki personel cinsiyetlerini al
+        function getPersonnelGendersForDateAndHouse(date, house) {
+            const dateShifts = shifts.filter(shift => shift.date === date);
+            const personnelGenders = dateShifts.map(shift => {
+                const personnelInfo = personnel.find(p => p.id === shift.personnelId);
+                return personnelInfo && personnelInfo.house === house ? 
+                    (personnelInfo.gender === 'male' ? 'Erkek' : 'Kadın') : '';
+            }).filter(gender => gender !== '');
+            
+            return [...new Set(personnelGenders)].join('<br>');
+        }
+        
+        // Personel analiz sayfasını oluştur
+        function renderAnalysisPage() {
+            if (personnel.length === 0) {
+                analysisContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Analiz için personel bulunmamaktadır</h3>
+                        <p>Personel yönetimi sayfasından personel ekleyebilirsiniz.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Erkek ve kadın personelleri ayır
+            const malePersonnel = personnel.filter(p => p.gender === 'male');
+            const femalePersonnel = personnel.filter(p => p.gender === 'female');
+            
+            // Erkek personel için adaletli dağılım analizi
+            let maleEqualityScore = 100;
+            if (malePersonnel.length > 0) {
+                const nightShifts = malePersonnel.map(p => p.shiftCounts['00-08'] || 0);
+                const dayShifts = malePersonnel.map(p => p.shiftCounts['08-16'] || 0);
+                const eveningShifts = malePersonnel.map(p => p.shiftCounts['16-00'] || 0);
+                
+                // Standart sapma hesapla (ne kadar düşükse o kadar adaletli)
+                const nightStdDev = calculateStandardDeviation(nightShifts);
+                const dayStdDev = calculateStandardDeviation(dayShifts);
+                const eveningStdDev = calculateStandardDeviation(eveningShifts);
+                
+                // Adalet skoru (standart sapma ne kadar düşükse skor o kadar yüksek)
+                maleEqualityScore = Math.max(0, 100 - (nightStdDev + dayStdDev + eveningStdDev) * 10);
+            }
+            
+            // Kadın personel için adaletli dağılım analizi
+            let femaleEqualityScore = 100;
+            if (femalePersonnel.length > 0) {
+                const dayShifts = femalePersonnel.map(p => p.shiftCounts['08-16'] || 0);
+                const stdDev = calculateStandardDeviation(dayShifts);
+                femaleEqualityScore = Math.max(0, 100 - stdDev * 20);
+            }
+            
+            // Genel adalet skoru
+            const overallEqualityScore = Math.round((maleEqualityScore + femaleEqualityScore) / 2);
+            
+            // Skor sınıfları
+            const maleScoreClass = maleEqualityScore >= 90 ? 'equality-excellent' : 
+                                  maleEqualityScore >= 75 ? 'equality-good' : 'equality-poor';
+            
+            const femaleScoreClass = femaleEqualityScore >= 90 ? 'equality-excellent' : 
+                                    femaleEqualityScore >= 75 ? 'equality-good' : 'equality-poor';
+            
+            const overallScoreClass = overallEqualityScore >= 90 ? 'equality-excellent' : 
+                                     overallEqualityScore >= 75 ? 'equality-good' : 'equality-poor';
+            
+            analysisContainer.innerHTML = `
+                <div class="analysis-card">
+                    <h3><i class="fas fa-male"></i> Erkek Personel Adalet Dağılımı</h3>
+                    <div class="equality-score ${maleScoreClass}">${Math.round(maleEqualityScore)}%</div>
+                    <p>Erkek personeller arasında vardiya dağılımının adalet seviyesi</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-night" style="width: ${Math.min(maleEqualityScore, 100)}%"></div>
+                    </div>
+                    <div class="distribution-list">
+                        <div class="distribution-item">
+                            <div class="shift-color night"></div>
+                            <span>Gece Vardiyası: ${calculateAverage(malePersonnel.map(p => p.shiftCounts['00-08'] || 0))} ortalama</span>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="shift-color day"></div>
+                            <span>Gündüz Vardiyası: ${calculateAverage(malePersonnel.map(p => p.shiftCounts['08-16'] || 0))} ortalama</span>
+                        </div>
+                        <div class="distribution-item">
+                            <div class="shift-color evening"></div>
+                            <span>Akşam Vardiyası: ${calculateAverage(malePersonnel.map(p => p.shiftCounts['16-00'] || 0))} ortalama</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-card">
+                    <h3><i class="fas fa-female"></i> Kadın Personel Adalet Dağılımı</h3>
+                    <div class="equality-score ${femaleScoreClass}">${Math.round(femaleEqualityScore)}%</div>
+                    <p>Kadın personeller arasında vardiya dağılımının adalet seviyesi</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-day" style="width: ${Math.min(femaleEqualityScore, 100)}%"></div>
+                    </div>
+                    <div class="distribution-list">
+                        <div class="distribution-item">
+                            <div class="shift-color day"></div>
+                            <span>Gündüz Vardiyası: ${calculateAverage(femalePersonnel.map(p => p.shiftCounts['08-16'] || 0))} ortalama</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analysis-card">
+                    <h3><i class="fas fa-balance-scale"></i> Genel Personel Dağılımı</h3>
+                    <div class="equality-score ${overallScoreClass}">${overallEqualityScore}%</div>
+                    <p>Sistem genelinde vardiya dağılımının adalet seviyesi</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill progress-evening" style="width: ${Math.min(overallEqualityScore, 100)}%"></div>
+                    </div>
+                    <div class="distribution-list">
+                        <div class="distribution-item">
+                            <i class="fas fa-users"></i>
+                            <span>Toplam Personel: ${personnel.length}</span>
+                        </div>
+                        <div class="distribution-item">
+                            <i class="fas fa-mars"></i>
+                            <span>Erkek Personel: ${malePersonnel.length}</span>
+                        </div>
+                        <div class="distribution-item">
+                            <i class="fas fa-venus"></i>
+                            <span>Kadın Personel: ${femalePersonnel.length}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Vardiya istatistiklerini de göster
+            renderAnalysisShiftStats();
+        }
+        
+        // Standart sapma hesapla
+        function calculateStandardDeviation(arr) {
+            if (arr.length === 0) return 0;
+            
+            const mean = arr.reduce((a, b) => a + b) / arr.length;
+            const squareDiffs = arr.map(value => Math.pow(value - mean, 2));
+            const avgSquareDiff = squareDiffs.reduce((a, b) => a + b) / squareDiffs.length;
+            return Math.sqrt(avgSquareDiff);
+        }
+        
+        // Ortalama hesapla
+        function calculateAverage(arr) {
+            if (arr.length === 0) return 0;
+            return (arr.reduce((a, b) => a + b) / arr.length).toFixed(1);
+        }
+        
+        // Yeni vardiya ekle
+        function addNewShift() {
+            const date = newShiftDate.value;
+            const personnelId = parseInt(newShiftPersonnel.value);
+            
+            if (!date || !personnelId) {
+                return;
+            }
+            
+            // Seçilen vardiya türlerini kontrol et
+            const selectedShiftTypes = [];
+            if (newShiftNight.checked) selectedShiftTypes.push('00-08');
+            if (newShiftDay.checked) selectedShiftTypes.push('08-16');
+            if (newShiftEvening.checked) selectedShiftTypes.push('16-00');
+            
+            if (selectedShiftTypes.length === 0) {
+                return;
+            }
+            
+            // Her seçilen vardiya türü için ayrı vardiya oluştur
+            selectedShiftTypes.forEach(type => {
+                // Yeni vardiya ID'si
+                const newShiftId = shifts.length > 0 ? Math.max(...shifts.map(s => s.id)) + 1 : 1;
+                
+                // Vardiyayı kaydet
+                shifts.push({
+                    id: newShiftId,
+                    date: date,
+                    personnelId: personnelId,
+                    type: type
+                });
+                
+                // Personelin çalışma saatini ve vardiya sayısını güncelle
+                const person = personnel.find(p => p.id === personnelId);
+                if (person) {
+                    person.workHours += 8;
+                    person.shiftCounts[type] = (person.shiftCounts[type] || 0) + 1;
+                }
+            });
+            
+            // Formu temizle
+            newShiftDate.value = '';
+            newShiftPersonnel.value = '';
+            newShiftNight.checked = false;
+            newShiftDay.checked = false;
+            newShiftEvening.checked = false;
+            
+            saveDataToLocalStorage();
+            updateAllPages();
+        }
+        
+        // Yazdırma işlemi
+        function printShifts() {
+            window.print();
+        }
+        
+        // Event listener'lar
+        addPersonnelButton.addEventListener('click', () => openPersonnelModal());
+        
+        shiftForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const shiftDate = document.getElementById('shift-date').value;
+            const personnelId = parseInt(document.getElementById('shift-personnel').value);
+            
+            // Seçilen vardiya türlerini kontrol et
+            const selectedShiftTypes = [];
+            if (shiftNight.checked) selectedShiftTypes.push('00-08');
+            if (shiftDay.checked) selectedShiftTypes.push('08-16');
+            if (shiftEvening.checked) selectedShiftTypes.push('16-00');
+            
+            if (selectedShiftTypes.length === 0) {
+                return;
+            }
+            
+            // Eğer vardiya düzenleniyorsa, önceki vardiyayı sil
+            const shiftId = deleteShiftButton.style.display === 'inline-block' ? 
+                parseInt(deleteShiftButton.dataset.shiftId) : null;
+            
+            if (shiftId) {
+                const oldShift = shifts.find(s => s.id === shiftId);
+                if (oldShift) {
+                    // Eski vardiyayı personel kaydından çıkar
+                    const oldPerson = personnel.find(p => p.id === oldShift.personnelId);
+                    if (oldPerson) {
+                        oldPerson.workHours -= 8;
+                        oldPerson.shiftCounts[oldShift.type] = Math.max(0, (oldPerson.shiftCounts[oldShift.type] || 0) - 1);
+                    }
+                    
+                    // Eski vardiyayı sil
+                    shifts = shifts.filter(s => s.id !== shiftId);
+                }
+            }
+            
+            // Yeni vardiyaları ekle
+            selectedShiftTypes.forEach(type => {
+                const newShiftId = shifts.length > 0 ? Math.max(...shifts.map(s => s.id)) + 1 : 1;
+                
+                shifts.push({
+                    id: newShiftId,
+                    date: shiftDate,
+                    personnelId: personnelId,
+                    type: type
+                });
+                
+                // Personelin çalışma saatini ve vardiya sayısını güncelle
+                const person = personnel.find(p => p.id === personnelId);
+                if (person) {
+                    person.workHours += 8;
+                    person.shiftCounts[type] = (person.shiftCounts[type] || 0) + 1;
+                }
+            });
+            
+            saveDataToLocalStorage();
+            updateAllPages();
+            shiftModal.style.display = 'none';
+        });
+        
+        personnelForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const personnelName = document.getElementById('personnel-name').value;
+            const personnelGender = document.getElementById('personnel-gender').value;
+            const personnelHouse = document.getElementById('personnel-house').value;
+            
+            // Yeni personel ID'si
+            const newPersonnelId = personnel.length > 0 ? Math.max(...personnel.map(p => p.id)) + 1 : 1;
+            
+            // Personeli kaydet
+            personnel.push({
+                id: newPersonnelId,
+                name: personnelName,
+                gender: personnelGender,
+                house: personnelHouse,
+                workHours: 0,
+                shiftCounts: { "00-08": 0, "08-16": 0, "16-00": 0 }
+            });
+            
+            saveDataToLocalStorage();
+            updateAllPages();
+            personnelModal.style.display = 'none';
+        });
+        
+        editPersonnelForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const personnelId = parseInt(document.getElementById('edit-personnel-id').value);
+            const personnelName = document.getElementById('edit-personnel-name').value;
+            const personnelGender = document.getElementById('edit-personnel-gender').value;
+            const personnelHouse = document.getElementById('edit-personnel-house').value;
+            
+            // Personeli güncelle
+            const personIndex = personnel.findIndex(p => p.id === personnelId);
+            if (personIndex !== -1) {
+                personnel[personIndex].name = personnelName;
+                personnel[personIndex].gender = personnelGender;
+                personnel[personIndex].house = personnelHouse;
+            }
+            
+            saveDataToLocalStorage();
+            updateAllPages();
+            editPersonnelModal.style.display = 'none';
+        });
+        
+        addShiftButton.addEventListener('click', addNewShift);
+        
+        // Yazdır butonu event listener'ı
+        printButton.addEventListener('click', printShifts);
+        
+        // Sil butonu event listener'ı
+        deleteShiftButton.addEventListener('click', function() {
+            const shiftId = parseInt(this.dataset.shiftId);
+            if (shiftId) {
+                deleteShift(shiftId);
+            }
+        });
+        
+        // Filtre değişiklikleri
+        personnelFilterHouse.addEventListener('change', renderPersonnelList);
+        personnelFilterGender.addEventListener('change', renderPersonnelList);
+        printFilterHouse.addEventListener('change', renderPrintPage);
+        printFilterGender.addEventListener('change', renderPrintPage);
+        printFilterShiftType.addEventListener('change', renderPrintPage);
+        printFilterName.addEventListener('input', renderPrintPage);
+        
+        // Modal kapatma
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                shiftModal.style.display = 'none';
+                personnelModal.style.display = 'none';
+                editPersonnelModal.style.display = 'none';
+            });
+        });
+        
+        // Sekme değiştirme
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Aktif sekme ve içeriği güncelle
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+                
+                // Analiz sekmesi aktifse, analiz sayfasını güncelle
+                if (tabId === 'analysis') {
+                    renderAnalysisPage();
+                }
+                // Yazdır sekmesi aktifse, yazdırma sayfasını güncelle
+                else if (tabId === 'print') {
+                    renderPrintPage();
+                }
+            });
+        });
+        
+        // Pencere dışına tıklayarak modal kapatma
+        window.addEventListener('click', (e) => {
+            if (e.target === shiftModal) {
+                shiftModal.style.display = 'none';
+            }
+            if (e.target === personnelModal) {
+                personnelModal.style.display = 'none';
+            }
+            if (e.target === editPersonnelModal) {
+                editPersonnelModal.style.display = 'none';
+            }
+        });
+        
+        // Sayfa yüklendiğinde verileri yükle
+        window.addEventListener('DOMContentLoaded', initializeData);
+    </script>
+</body>
+</html>
